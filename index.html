@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Aplikasi</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Arial', sans-serif;
+            color: #ffffff;
+            background: url('J.jpeg') no-repeat center center fixed; /* Ganti dengan link background */
+            background-size: cover;
+        }
+        #container {
+            text-align: center;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        h1 {
+            font-size: 2.5em;
+            color: #ffcc00;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 5px;
+            background-color: #ffcc00;
+            color: #000;
+            cursor: pointer;
+            margin: 10px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #e6b800;
+        }
+        .menu-item {
+            display: none;
+        }
+        .answer {
+            font-size: 2em; /* Ukuran font jawaban */
+            font-weight: bold; /* Bold font */
+        }
+    </style>
+</head>
+<body>
+    <audio id="background-music" loop>
+        <source src="music.mp3" type="audio/mpeg"> <!-- Ganti dengan link musik -->
+        Your browser does not support the audio element.
+    </audio>
+    <div id="container">
+        <h1>Menu</h1>
+        <button onclick="showMenu('tanya')">Tanya</button>
+        <button onclick="showMenu('cermin')">Cermin</button>
+        <button onclick="showMenu('cekKhodam')">Cek Khodam</button>
+        <button onclick="showMenu('gombalan')">Kasih Aku Gombalan</button>
+
+        <div id="tanya" class="menu-item">
+            <input type="text" id="question" placeholder="Tanya apa?">
+            <button onclick="getAnswer()">Tanya!</button>
+            <div id="answer" class="answer"></div>
+        </div>
+
+        <div id="cermin" class="menu-item">
+            <h1>Cermin</h1>
+            <video id="video" width="320" height="240" autoplay></video>
+            <div id="warning" style="display:none; color: red; font-size: 1.5em;">Mukamu di bawah standar!</div>
+        </div>
+
+        <div id="cekKhodam" class="menu-item">
+            <input type="text" id="name" placeholder="Masukkan nama lu">
+            <button onclick="cekKhodam()">Cek Khodam</button>
+            <div id="khodamResult" class="answer"></div>
+        </div>
+
+        <div id="gombalan" class="menu-item">
+            <button onclick="kasihGombalan()">Gombalan!</button>
+            <div id="gombalanResult" class="answer"></div>
+        </div>
+    </div>
+
+    <script>
+        const answers = [
+            "Iya bener.",
+            "Enggak bener.",
+            "Mungkin sih.",
+            "Mungkin nanti aja.",
+            "Jangan percaya deh.",
+            "Pasti! Cuoi!",
+            "Tunggu sebentar, bro.",
+            "Coba lagi nanti.",
+            "Enggak ada yang tahu.",
+            "Coba tanya lagi.",
+            "Semua bisa jadi, cuy.",
+            "Sebaiknya enggak.",
+            "Bisa jadi iya.",
+            "Cuma waktu yang bisa jawab.",
+            "Tergantung situasi.",
+            "Gue enggak ngerti."
+        ];
+
+        const gombalanResponses = [
+            "Yahh, gapernah di gombalin.",
+            "Mendingan lu fokus belajar.",
+            "Gue lebih suka jomblo.",
+            "Hayo, mau digombalin apa?",
+            "Gombal? Gue ngga ahli.",
+            "Gombalan itu buat orang yang kasihan.",
+            "Gue ngga mau disakiti lagi, bro.",
+            "Jangan harap gue ngasih gombalan.",
+            "Lu masih nunggu gombalan? Hahaha.",
+            "Coba tanya pacar lu, deh."
+        ];
+
+        const khodamResponses = [
+            "Khodam lu kayaknya masih tidur.",
+            "Khodam lu mungkin lagi ngumpet.",
+            "Gue rasa khodam lu lagi sibuk.",
+            "Khodam lu enggak jelas, bro!",
+            "Siapa tahu khodam lu lagi makan.",
+            "Khodam lu kayaknya si Siti Bling-Bling.",
+            "Khodam lu ngikutin kayak Pocong Konyol.",
+            "Khodam lu mau pergi kayak Kuntilanak Konyol.",
+            "Mungkin khodam lu si Tuyul Keren.",
+            "Jangan-jangan khodam lu ya Mbah Gendong."
+        ];
+
+        function getAnswer() {
+            const question = document.getElementById("question").value;
+            let randomAnswer;
+
+            if (/sarkas|apa$|apa\?$|berapa$|brp$/.test(question.toLowerCase())) {
+                randomAnswer = answers[answers.length - 1];
+            } else {
+                randomAnswer = answers[Math.floor(Math.random() * (answers.length - 1))];
+            }
+
+            document.getElementById("answer").innerText = randomAnswer;
+            document.getElementById("question").value = '';
+            document.getElementById("question").style.display = 'none';
+        }
+
+        function cekKhodam() {
+            const name = document.getElementById("name").value;
+            if (name) {
+                const randomKhodam = khodamResponses[Math.floor(Math.random() * khodamResponses.length)];
+                document.getElementById("khodamResult").innerText = `${name}, ${randomKhodam}`;
+            } else {
+                document.getElementById("khodamResult").innerText = "Masukkan nama lu dulu!";
+            }
+            document.getElementById("name").value = ''; 
+        }
+
+        function kasihGombalan() {
+            const randomGombalan = gombalanResponses[Math.floor(Math.random() * gombalanResponses.length)];
+            document.getElementById("gombalanResult").innerText = randomGombalan;
+        }
+
+        function showMenu(menu) {
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.style.display = 'none'; 
+            });
+            document.getElementById(menu).style.display = 'block'; 
+
+            if (menu === 'cermin') {
+                startCamera(); 
+            }
+        }
+
+        function startCamera() {
+            const video = document.getElementById('video');
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(stream => {
+                    video.srcObject = stream;
+                    setTimeout(() => {
+                        video.srcObject = null; // Menutup video setelah 5 detik
+                        document.getElementById("warning").style.display = 'block'; // Tampilkan peringatan
+                    }, 5000);
+                })
+                .catch(err => {
+                    console.error("Kamera enggak bisa diakses: " + err);
+                });
+        }
+
+        // Memulai musik
+        document.getElementById("background-music").play();
+
+        // Tampilkan menu awal
+        showMenu('tanya');
+    </script>
+</body>
+</html>
